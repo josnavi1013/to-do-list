@@ -1,0 +1,141 @@
+<html>
+    <head>
+         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TO DO LIST</title>
+        <style>
+            body{
+                background-color: #ddd;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh; 
+                overflow: hidden;
+            }
+            .container{
+                background-color: #056765;
+                border-radius: 20px;
+                width: 600px;
+                height: 400px;
+                padding: 20px;
+                overflow-y: scroll;
+                
+            }
+            h2{
+                color: #fff;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 24px;
+            }
+            .create-list{
+                display: flex;
+                border-radius: 16px;
+            }
+            .create-list input{
+                padding: 16px;
+                flex: 1;
+                border-radius: 16px;
+            }
+            #create-btn{
+                background-color: #069b98;
+                color: #000;
+                font-weight: 600;
+                font-size: 16px;
+                padding: 16px 20px;
+                border-radius: 16px;
+            }
+            .listitems{
+                color: #fff;
+                font-size: 18px;
+            }
+            .listitems li{
+                list-style: none;
+                line-height: 2.5;
+                position: relative;
+            }
+            .listitems li::before{
+                content: '🔲';
+                font-size: 16px;
+                padding-right: 12px;
+            }
+            .listitems li.checked::before{
+                content: '✅';
+                font-size: 16px;
+                padding-right: 12px;
+                
+            }
+            .listitems li.checked{
+                text-decoration: line-through;
+            }
+            .del-btn{
+                background-color: #040404;
+                font-size: 12px;
+                padding: 4px 8px;
+                border-radius: 8px;
+                position: absolute;
+                right: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class="container">
+            <h2>to do list</h2>
+            <div class="create-list">
+             <input type="text" id="listcreate">
+             <button id="create-btn">ADD</button>
+            </div>
+            <ul class="listitems">
+                <li>Web Design<span class="del-btn">✖</span></li>
+                <li class="checked">Client Meeting<span class="del-btn">✖</span></li>
+            </ul>
+        </div>
+        <script>
+           let allList=document.querySelector('.listitems');
+           let createList=document.getElementById('listcreate');
+           let createBtn=document.getElementById('create-btn');
+           
+           createBtn.addEventListener('click',function(){
+            if(createList.value == ""){
+                alert('enter today work task');
+            }else{
+                //create li
+                let list=document.createElement('li');
+                list.innerText=createList.value;
+                
+                //create span delete btn
+                let spanbtn=document.createElement('span');
+                spanbtn.className='del-btn';
+                spanbtn.innerText='✖';
+                
+                list.appendChild(spanbtn);//li
+
+                allList.appendChild(list);//ul
+            }
+            createList.value="";
+            savePresentData();
+           });
+
+           allList.addEventListener('click',function(e){
+            console.log(e);
+            if(e.target.tagName === 'LI'){
+                e.target.classList.toggle('checked');
+                savePresentData();
+            }else if(e.target.tagName === 'SPAN'){
+              e.target.parentElement.remove();
+               savePresentData();
+            }
+           });
+
+          function savePresentData(){
+            localStorage.setItem('data',allList.innerHTML);
+           }
+           function showSavedData(){
+            allList.innerHTML=localStorage.getItem('data');
+           }
+           showSavedData();
+        </script>
+    </body>
+</html>
